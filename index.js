@@ -66,21 +66,20 @@ function generatePrompt() {
 }
 
 function renderDepartment() {
-    return inquirer
+    inquirer
     .prompt({
-            name: 'department',
+            name: 'department_name',
             type: 'input',
             message: 'What is the name of the department?',
     })
-    .then((response) => {
-        if (response.department) {
+    .then(response => {
+            db.createDepartment(response);
             generatePrompt();
-        }
     })
 }
 
 function renderRole() {
-    return inquirer
+    inquirer
     .prompt([
         {
             name: 'role',
@@ -99,14 +98,12 @@ function renderRole() {
         },
     ])
     .then((response) => {
-        if (response.dept_role) {
             generatePrompt();
-        }
     })
 }
 
 function renderEmployee() {
-    return inquirer
+    inquirer
     .prompt([
         {
             name: 'name',
@@ -124,9 +121,7 @@ function renderEmployee() {
             message: "Who is the employee's manager?",
         },
     ]).then((response) => {
-        if (response.employee_mgr) {
-            generatePrompt();
-        }
+            generatePrompt()
     })
 }
 
