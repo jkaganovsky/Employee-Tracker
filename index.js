@@ -26,15 +26,15 @@ function generatePrompt() {
         .then((select) => {
             switch (select.prompt) {
                 case "Add department":
-                    renderDepartment();
+                    addDepartment();
                     return;
 
                 case "Add role":
-                    renderRole();
+                    addRole();
                     return;
 
                 case "Add employee":
-                    renderEmployee();
+                    addEmployee();
                     return;
 
                 case "View departments":
@@ -70,7 +70,7 @@ function generatePrompt() {
         })
 }
 
-function renderDepartment() {
+function addDepartment() {
     inquirer
     .prompt({
         name: 'department_name',
@@ -83,7 +83,7 @@ function renderDepartment() {
     })
 }
 
-function renderRole() {
+function addRole() {
     db
     .getRoles()
     .then((role) => {
@@ -95,12 +95,7 @@ function renderRole() {
             name:  role.title,
         }))
 
-        console.log(
-            role.map((role) => ({
-                value: role.id,
-                name:  role.title,
-            }))
-        );
+        console.log(roleChoices);
 
         inquirer
         .prompt([
@@ -121,32 +116,68 @@ function renderRole() {
                 choices: roleChoices,
             }
         ]).then(response => {
-                db.createRole(response);
-                generatePrompt();
+            db.createRole(response);
+            generatePrompt();
             })
     })
 }
 
-function renderEmployee() {
+function addEmployee() {
+    db
+    .getEmployeesAndRoles()
+    .then((employees) => {
+
+        console.log(employees);
+
+        const employeeChoices = employees.map((employees) => ({
+            value: employees.id,
+            name: employees.first_name + " " + employees.last_name
+        }))
+
+        const roleChoices = employees.map((employees) => ({
+            value: employees.role_id,
+            name: employees.title,
+        }))
+
+        console.log(
+            employees.map((employees) => ({
+                id: employees.id,
+                first: employees.first_name,
+                last: employees.last_name,
+                title: employees.title,
+                manager: employees.manager_id,
+            }))
+        );
+
     inquirer
     .prompt([
         {
-            name: 'name',
+            name: 'first_name',
             type: 'input',
             message: "What is the employee's first name?",
         },
         {
-            name: 'employee_role',
+            name: 'last_name',
             type: 'input',
-            message: "What is the employee's role?",
+            message: "What is the employee's last name?",
         },
         {
-            name: 'employee_mgr',
-            type: 'input',
-            message: "Who is the employee's manager?",
+            name: 'role_id',
+            type: 'list',
+            message: "What is the employee's role?",
+            choices: roleChoices,
         },
+        {
+            name: 'manager_id',
+            type: 'list',
+            message: "Who is the employee's manager?",
+            choices: employeeChoices,
+        }
     ]).then((response) => {
-            generatePrompt()
+        console.log(response);
+        db.createEmployee(response);
+        generatePrompt()
+        })
     })
 }
 
