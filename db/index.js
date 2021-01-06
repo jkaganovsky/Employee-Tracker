@@ -15,5 +15,14 @@ module.exports = {
 
         getEmployees() {
             return connect.query("SELECT * FROM employee")
-        }
+        },
+
+        createDepartment(data) {
+            return connect.query("INSERT INTO department SET ?", data)
+        },
+
+        createRole(data) {
+            return connect.query("INSERT INTO employee_role SET ?", data)
+        },
 }
+

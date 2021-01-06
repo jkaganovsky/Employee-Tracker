@@ -9,16 +9,18 @@ function generatePrompt() {
                 name: 'prompt',
                 type: 'list',
                 message: 'What would you like to do?',
-                choices: [
-                        "Add department",
-                        "Add role",
-                        "Add employee",
-                        "View departments",
-                        "View roles",
-                        "View employees",
-                        "Update department",
-                        "Update role",
-                        "Update employee"
+                choices:
+                [
+                    "Add department",
+                    "Add role",
+                    "Add employee",
+                    "View departments",
+                    "View roles",
+                    "View employees",
+                    "Update department",
+                    "Update role",
+                    "Update employee",
+                    "Quit"
                 ]
         })
         .then((select) => {
@@ -59,6 +61,9 @@ function generatePrompt() {
                     updateEmployee();
                     return;
 
+                case "Quit":
+                    return;
+
                 default:
                     connection.end();
             }
@@ -68,37 +73,57 @@ function generatePrompt() {
 function renderDepartment() {
     inquirer
     .prompt({
-            name: 'department_name',
-            type: 'input',
-            message: 'What is the name of the department?',
+        name: 'department_name',
+        type: 'input',
+        message: 'What is the name of the department?',
     })
     .then(response => {
-            db.createDepartment(response);
-            generatePrompt();
+        db.createDepartment(response);
+        generatePrompt();
     })
 }
 
 function renderRole() {
-    inquirer
-    .prompt([
-        {
-            name: 'role',
-            type: 'input',
-            message: 'What is the name of the role?',
-        },
-        {
-            name: 'salary',
-            type: 'input',
-            message: 'What is the salary of the role?',
-        },
-        {
-            name: 'dept_role',
-            type: 'input',
-            message: 'Which department does the role belong to?',
-        },
-    ])
-    .then((response) => {
-            generatePrompt();
+    db
+    .getRoles()
+    .then((role) => {
+
+        console.log(role);
+
+        const roleChoices = role.map((role) => ({
+            value: role.id,
+            name:  role.title,
+        }))
+
+        console.log(
+            role.map((role) => ({
+                value: role.id,
+                name:  role.title,
+            }))
+        );
+
+        inquirer
+        .prompt([
+            {
+                name: 'title',
+                type: 'input',
+                message: 'What is the name of the role?',
+            },
+            {
+                name: 'salary',
+                type: 'input',
+                message: 'What is the salary of the role?',
+            },
+            {
+                name: 'department_id',
+                type: 'list',
+                message: 'Which department does the role belong to?',
+                choices: roleChoices,
+            }
+        ]).then(response => {
+                db.createRole(response);
+                generatePrompt();
+            })
     })
 }
 
