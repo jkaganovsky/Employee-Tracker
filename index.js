@@ -17,9 +17,9 @@ function generatePrompt() {
                     "View departments",
                     "View roles",
                     "View employees",
-                    "Update department",
+                    // "Update department",
                     "Update role",
-                    "Update employee",
+                    // "Update employee",
                     "Quit"
                 ]
         })
@@ -49,17 +49,17 @@ function generatePrompt() {
                     viewEmployees();
                     return;
 
-                case "Update department":
-                    updateDepartment();
-                    return;
+                // case "Update department":
+                //     updateDepartment();
+                //     return;
 
                 case "Update role":
                     updateRole();
                     return;
 
-                case "Update employee":
-                    updateEmployee();
-                    return;
+                // case "Update employee":
+                //     updateEmployee();
+                //     return;
 
                 case "Quit":
                     return;
@@ -88,14 +88,14 @@ function addRole() {
     .getRoles()
     .then((role) => {
 
-        console.log(role);
+        // console.log(role);
 
         const roleChoices = role.map((role) => ({
             value: role.id,
             name:  role.title,
         }))
 
-        console.log(roleChoices);
+        // console.log(roleChoices);
 
         inquirer
         .prompt([
@@ -127,7 +127,7 @@ function addEmployee() {
     .getEmployeesAndRoles()
     .then((employees) => {
 
-        console.log(employees);
+        // console.log(employees);
 
         const employeeChoices = employees.map((employees) => ({
             value: employees.id,
@@ -139,15 +139,15 @@ function addEmployee() {
             name: employees.title,
         }))
 
-        console.log(
-            employees.map((employees) => ({
-                id: employees.id,
-                first: employees.first_name,
-                last: employees.last_name,
-                title: employees.title,
-                manager: employees.manager_id,
-            }))
-        );
+        // console.log(
+        //     employees.map((employees) => ({
+        //         id: employees.id,
+        //         first: employees.first_name,
+        //         last: employees.last_name,
+        //         title: employees.title,
+        //         manager: employees.manager_id,
+        //     }))
+        // );
 
     inquirer
     .prompt([
@@ -219,19 +219,21 @@ function updateRole() {
             name: employees.first_name + " " + employees.last_name
         }))
 
-        const roleChoices = employees.map((employees) => ({
-            value: employees.role_id,
-            name: employees.title,
+        const roleChoices = employees.map((employeeRoles) => ({
+            // if (employees != "null") {
+                value: employeeRoles.id,
+                name: employeeRoles.title,
+            // }
         }))
 
-        console.log(
-            employees.map((employees) => ({
-                id: employees.id,
-                first: employees.first_name,
-                last: employees.last_name,
-                title: employees.title,
-                manager: employees.manager_id,
-            }))
+        console.log(roleChoices
+            // employees.map((employees) => ({
+            //     id: employees.id,
+            //     first: employees.first_name,
+            //     last: employees.last_name,
+            //     title: employees.title,
+            //     manager: employees.manager_id,
+            // }))
         );
 
     inquirer
@@ -250,7 +252,8 @@ function updateRole() {
         },
     ]).then((response) => {
         console.log(response);
-        db.updateEmployee(response);
+        const data = [ {role_id: response.role_id}, {id: response.id} ]
+        db.updateEmployee(data);
         generatePrompt()
         })
     })
