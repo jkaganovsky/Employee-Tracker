@@ -207,6 +207,55 @@ function viewEmployees() {
         })
 }
 
+function updateRole() {
+    db
+    .getEmployeesAndRoles()
+    .then((employees) => {
+
+        console.log(employees);
+
+        const employeeChoices = employees.map((employees) => ({
+            value: employees.id,
+            name: employees.first_name + " " + employees.last_name
+        }))
+
+        const roleChoices = employees.map((employees) => ({
+            value: employees.role_id,
+            name: employees.title,
+        }))
+
+        console.log(
+            employees.map((employees) => ({
+                id: employees.id,
+                first: employees.first_name,
+                last: employees.last_name,
+                title: employees.title,
+                manager: employees.manager_id,
+            }))
+        );
+
+    inquirer
+    .prompt([
+        {
+            name: 'id',
+            type: 'list',
+            message: "Which employee would you like to update?",
+            choices: employeeChoices,
+        },
+        {
+            name: 'role_id',
+            type: 'list',
+            message: "What is the employee's new role?",
+            choices: roleChoices,
+        },
+    ]).then((response) => {
+        console.log(response);
+        db.updateEmployee(response);
+        generatePrompt()
+        })
+    })
+}
+
 generatePrompt();
 
 

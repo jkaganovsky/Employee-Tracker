@@ -37,5 +37,17 @@ module.exports = {
         createEmployee(data) {
             return connect.query("INSERT INTO employee SET ?", data)
         },
+
+        updateEmployee(data) {
+            return connect.query("UPDATE employee SET ? WHERE ?",
+            [
+                {
+                    role_id: data.role_id
+                },
+                {
+                    id: data.id
+                }
+            ])
+        }
 }
 
