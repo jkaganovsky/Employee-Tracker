@@ -12,12 +12,10 @@ module.exports = {
         getRoles() {
             return connect.query(
                 `SELECT
-                employee.id,
+                employee_role.id,
                 employee_role.title, employee_role.salary, department.department_name
                 AS department
-                FROM employee
-                LEFT JOIN employee_role
-                ON employee.role_id = employee_role.id
+                FROM employee_role
                 LEFT JOIN department
                 ON employee_role.department_id = department.id;`)
         },

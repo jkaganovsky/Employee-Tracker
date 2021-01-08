@@ -3,6 +3,7 @@ const connection = require("./db/connection");
 const inquirer = require("inquirer");
 const path = require("path");
 
+// PROMPTS
 function generatePrompt() {
     inquirer
         .prompt({
@@ -18,6 +19,7 @@ function generatePrompt() {
                     "View roles",
                     "View employees",
                     // "View employees by manager",
+                    // "View total departmental budget",
                     // "Update department",
                     "Update role",
                     // "Update employee",
@@ -58,6 +60,10 @@ function generatePrompt() {
                 //     viewEmployeesByManager();
                 //     break;
 
+                // case "View total utilized budget of a department":
+                //     viewBudget();
+                //     break;
+
                 // case "Update department":
                 //     updateDepartment();
                 //     break;
@@ -95,6 +101,7 @@ function generatePrompt() {
         })
 }
 
+// ADD
 function addDepartment() {
     inquirer
         .prompt({
@@ -112,17 +119,17 @@ function addDepartment() {
 
 function addRole() {
     db
-        .getRoles()
-        .then((role) => {
+        .getDepartments()
+        .then((department) => {
 
-            console.table(role);
+            console.table(department);
 
-            const roleChoices = role.map((role) => ({
-                value: role.id,
-                name:  role.title,
+            const departmentChoices = department.map((department) => ({
+                value: department.id,
+                name:  department.department_name,
             }))
 
-            console.table(roleChoices);
+            console.table(departmentChoices);
 
         inquirer
             .prompt([
@@ -140,10 +147,11 @@ function addRole() {
                     name: 'department_id',
                     type: 'list',
                     message: 'Which department does the role belong to?',
-                    choices: roleChoices,
+                    choices: departmentChoices,
                 }
             ])
             .then(response => {
+                console.log(response);
                 db.createRole(response);
                 generatePrompt();
             })
@@ -202,6 +210,7 @@ function addEmployee() {
         })
 }
 
+// VIEW
 function viewDepartments() {
     db
         .getDepartments()
@@ -228,6 +237,7 @@ function viewEmployees() {
         })
 }
 
+// UPDATE
 function updateRole() {
     db
         .getEmployeesAndRoles()
@@ -271,6 +281,7 @@ function updateRole() {
         })
 }
 
+// DELETE
 function deleteEmployees() {
     db
         .getEmployees()
@@ -304,4 +315,5 @@ function deleteEmployees() {
 
 generatePrompt();
 
-
+// Note comments for future development.
+// Work on creating separate files for each function.
