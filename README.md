@@ -17,8 +17,9 @@ A command-line application that allows a business owner to view and manage the d
 
 ## Content
 * DEMO
-
     [HTML Preview Link](https://drive.google.com/file/d/1GFaNG7Ga8Q1QYAofJCmbIKwbxb_-wvj-/view)
+    
+<iframe src="https://drive.google.com/file/d/1GFaNG7Ga8Q1QYAofJCmbIKwbxb_-wvj-/preview" width="640" height="480"></iframe>
 
 ## Credits
 1. My husband, Sergei Kaganovsky, a Software Development Engineer at Amazon AWS - https://www.linkedin.com/in/sergeik/
