@@ -30,7 +30,7 @@ A command-line application that allows a business owner to view and manage the d
 ## License
 MIT License
 
-Copyright (c) [2020] [Jailanie Kaganovsky]
+Copyright (c) [2021] [Jailanie Kaganovsky]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
