@@ -16,8 +16,10 @@ module.exports = {
                 employee_role.title, employee_role.salary, department.department_name
                 AS department
                 FROM employee
-                LEFT JOIN employee_role ON employee.role_id = employee_role.id
-                LEFT JOIN department ON employee_role.department_id = department.id;`)
+                LEFT JOIN employee_role
+                ON employee.role_id = employee_role.id
+                LEFT JOIN department
+                ON employee_role.department_id = department.id;`)
         },
 
         getEmployees() {
@@ -25,13 +27,18 @@ module.exports = {
                 `SELECT
                 employee.id,
                 CONCAT(employee.first_name, " ", employee.last_name)
-                AS employee_name, employee_role.title, employee_role.salary, department.department_name
+                AS employee_name,
+                employee_role.title, employee_role.salary, department.department_name
                 AS department,
-                CONCAT(manager.first_name, " ", manager.last_name) AS manager
+                CONCAT(manager.first_name, " ", manager.last_name)
+                AS manager
                 FROM employee
-                LEFT JOIN employee_role ON employee.role_id = employee_role.id
-                LEFT JOIN department ON employee_role.department_id = department.id
-                LEFT JOIN employee manager ON manager.id = employee.manager_id;`)
+                LEFT JOIN employee_role
+                ON employee.role_id = employee_role.id
+                LEFT JOIN department
+                ON employee_role.department_id = department.id
+                LEFT JOIN employee manager
+                ON manager.id = employee.manager_id;`)
         },
 
         getEmployeesAndRoles() {
@@ -57,8 +64,14 @@ module.exports = {
         },
 
         updateEmployee(data) {
-            console.log(data);
             return connect.query("UPDATE employee SET ? WHERE ?", data)
+        },
+
+        deleteEmployees(data) {
+            return connect.query(
+                `DELETE FROM employee
+                WHERE ?`, data)
         }
+
 }
 

@@ -17,9 +17,14 @@ function generatePrompt() {
                     "View departments",
                     "View roles",
                     "View employees",
+                    // "View employees by manager",
                     // "Update department",
                     "Update role",
                     // "Update employee",
+                    // "Update employee managers",
+                    // "Delete departments",
+                    // "Delete roles",
+                    "Delete employees",
                     "Quit"
                 ]
         })
@@ -49,6 +54,10 @@ function generatePrompt() {
                     viewEmployees();
                     break;
 
+                // case "View employees by manager":
+                //     viewEmployeesByManager();
+                //     break;
+
                 // case "Update department":
                 //     updateDepartment();
                 //     break;
@@ -61,6 +70,22 @@ function generatePrompt() {
                 //     updateEmployee();
                 //     break;
 
+                // case "Update employee managers":
+                //     updateEmployeeManagers();
+                //     break;
+
+                // case "Delete departments":
+                //     deleteDepartments();
+                //     break;
+
+                // case "Delete roles":
+                //     deleteRoles();
+                //     break;
+
+                case "Delete employees":
+                    deleteEmployees();
+                    break;
+
                 case "Quit":
                     break;
 
@@ -72,107 +97,109 @@ function generatePrompt() {
 
 function addDepartment() {
     inquirer
-    .prompt({
-        name: 'department_name',
-        type: 'input',
-        message: 'What is the name of the department?',
-    })
-    .then(response => {
-        db.createDepartment(response);
+        .prompt({
+            name: 'department_name',
+            type: 'input',
+            message: 'What is the name of the department?',
+        })
+        .then(response => {
+            db.createDepartment(response);
 
-        console.log("You have successfully added a new department!");
-        generatePrompt();
-    })
+            console.log("You have successfully added a new department!");
+            generatePrompt();
+        })
 }
 
 function addRole() {
     db
-    .getRoles()
-    .then((role) => {
+        .getRoles()
+        .then((role) => {
 
-        console.table(role);
+            console.table(role);
 
-        const roleChoices = role.map((role) => ({
-            value: role.id,
-            name:  role.title,
-        }))
+            const roleChoices = role.map((role) => ({
+                value: role.id,
+                name:  role.title,
+            }))
 
-        console.table(roleChoices);
+            console.table(roleChoices);
 
         inquirer
-        .prompt([
-            {
-                name: 'title',
-                type: 'input',
-                message: 'What is the name of the role?',
-            },
-            {
-                name: 'salary',
-                type: 'input',
-                message: 'What is the salary of the role?',
-            },
-            {
-                name: 'department_id',
-                type: 'list',
-                message: 'Which department does the role belong to?',
-                choices: roleChoices,
-            }
-        ]).then(response => {
-            db.createRole(response);
-            generatePrompt();
+            .prompt([
+                {
+                    name: 'title',
+                    type: 'input',
+                    message: 'What is the name of the role?',
+                },
+                {
+                    name: 'salary',
+                    type: 'input',
+                    message: 'What is the salary of the role?',
+                },
+                {
+                    name: 'department_id',
+                    type: 'list',
+                    message: 'Which department does the role belong to?',
+                    choices: roleChoices,
+                }
+            ])
+            .then(response => {
+                db.createRole(response);
+                generatePrompt();
             })
     })
 }
 
 function addEmployee() {
     db
-    .getEmployeesAndRoles()
-    .then((employees) => {
+        .getEmployeesAndRoles()
+        .then((employees) => {
 
-        console.table(employees);
+            console.table(employees);
 
-        const employeeChoices = employees.map((employees) => ({
-            value: employees.id,
-            name: employees.first_name + " " + employees.last_name
-        }))
+            const employeeChoices = employees.map((employees) => ({
+                value: employees.id,
+                name: employees.first_name + " " + employees.last_name
+            }))
 
-        const roleChoices = employees.map((employees) => ({
-            value: employees.role_id,
-            name: employees.title,
-        }))
+            const roleChoices = employees.map((employees) => ({
+                value: employees.role_id,
+                name: employees.title,
+            }))
 
-        console.table(employeeChoices, roleChoices);
+            console.table(employeeChoices, roleChoices);
 
-    inquirer
-    .prompt([
-        {
-            name: 'first_name',
-            type: 'input',
-            message: "What is the employee's first name?",
-        },
-        {
-            name: 'last_name',
-            type: 'input',
-            message: "What is the employee's last name?",
-        },
-        {
-            name: 'role_id',
-            type: 'list',
-            message: "What is the employee's role?",
-            choices: roleChoices,
-        },
-        {
-            name: 'manager_id',
-            type: 'list',
-            message: "Who is the employee's manager?",
-            choices: employeeChoices,
-        }
-    ]).then((response) => {
-        console.table(response);
-        db.createEmployee(response);
-        generatePrompt()
+        inquirer
+            .prompt([
+                {
+                    name: 'first_name',
+                    type: 'input',
+                    message: "What is the employee's first name?",
+                },
+                {
+                    name: 'last_name',
+                    type: 'input',
+                    message: "What is the employee's last name?",
+                },
+                {
+                    name: 'role_id',
+                    type: 'list',
+                    message: "What is the employee's role?",
+                    choices: roleChoices,
+                },
+                {
+                    name: 'manager_id',
+                    type: 'list',
+                    message: "Who is the employee's manager?",
+                    choices: employeeChoices,
+                }
+            ])
+            .then((response) => {
+                console.table(response);
+                db.createEmployee(response);
+                generatePrompt()
+            })
         })
-    })
 }
 
 function viewDepartments() {
@@ -203,54 +230,76 @@ function viewEmployees() {
 
 function updateRole() {
     db
-    .getEmployeesAndRoles()
-    .then((employees) => {
+        .getEmployeesAndRoles()
+        .then((employees) => {
 
-        console.table(employees);
+            console.table(employees);
 
-        const employeeChoices = employees.map((employees) => ({
-            value: employees.id,
-            name: employees.first_name + " " + employees.last_name
-        }))
+            const employeeChoices = employees.map((employees) => ({
+                value: employees.id,
+                name: employees.first_name + " " + employees.last_name
+            }))
 
-        const roleChoices = employees.map((employeeRoles) => ({
-            // if (employees != "null") {
-                value: employeeRoles.id,
-                name: employeeRoles.title,
-            // }
-        }))
+            const roleChoices = employees.map((employeeRoles) => ({
+                    value: employeeRoles.id,
+                    name: employeeRoles.title,
+            }))
 
-        console.table(roleChoices
-            // employees.map((employees) => ({
-            //     id: employees.id,
-            //     first: employees.first_name,
-            //     last: employees.last_name,
-            //     title: employees.title,
-            //     manager: employees.manager_id,
-            // }))
-        );
+            console.table(roleChoices);
 
-    inquirer
-    .prompt([
-        {
-            name: 'id',
-            type: 'list',
-            message: "Which employee would you like to update?",
-            choices: employeeChoices,
-        },
-        {
-            name: 'role_id',
-            type: 'list',
-            message: "What is the employee's new role?",
-            choices: roleChoices,
-        },
-    ]).then((response) => {
-        console.table(response);
-        const data = [ {role_id: response.role_id}, {id: response.id} ]
-        db.updateEmployee(data);
-        generatePrompt()
+        inquirer
+            .prompt([
+                {
+                    name: 'id',
+                    type: 'list',
+                    message: "Which employee would you like to update?",
+                    choices: employeeChoices,
+                },
+                {
+                    name: 'role_id',
+                    type: 'list',
+                    message: "What is the employee's new role?",
+                    choices: roleChoices,
+                },
+            ])
+            .then((response) => {
+                console.table(response);
+                const data = [ {role_id: response.role_id}, {id: response.id} ]
+                db.updateEmployee(data);
+                generatePrompt()
+            })
         })
-    })
+}
+
+function deleteEmployees() {
+    db
+        .getEmployees()
+        .then((employees) => {
+
+            console.table(employees);
+
+            const employeeChoices = employees.map((employees) => ({
+                value: employees.id,
+                name: employees.employee_name
+            }))
+
+            console.table(employeeChoices);
+
+        inquirer
+            .prompt({
+                    name: 'id',
+                    type: 'list',
+                    message: "Which employee would you like to delete?",
+                    choices: employeeChoices,
+            })
+            .then((response) => {
+                console.table(response);
+                const data = {id: response.id}
+                console.log(data);
+                db.deleteEmployees(data);
+                generatePrompt()
+            })
+        })
 }
 
 generatePrompt();
