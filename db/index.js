@@ -36,10 +36,11 @@ module.exports = {
 
         getEmployeesAndRoles() {
             return connect.query(
-                `SELECT DISTINCT *
-                FROM employee_trackerDB.employee_role
-                LEFT JOIN employee_trackerDB.employee
-                ON employee.role_id = employee_role.id`
+                `SELECT *
+                FROM employee_role
+                LEFT JOIN employee
+                ON employee.id = employee_role.id
+                ORDER BY employee.id;`
             )
         },
 
