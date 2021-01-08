@@ -27,42 +27,42 @@ function generatePrompt() {
             switch (select.prompt) {
                 case "Add department":
                     addDepartment();
-                    return;
+                    break;
 
                 case "Add role":
                     addRole();
-                    return;
+                    break;
 
                 case "Add employee":
                     addEmployee();
-                    return;
+                    break;
 
                 case "View departments":
                     viewDepartments();
-                    return;
+                    break;
 
                 case "View roles":
                     viewRoles();
-                    return;
+                    break;
 
                 case "View employees":
                     viewEmployees();
-                    return;
+                    break;
 
                 // case "Update department":
                 //     updateDepartment();
-                //     return;
+                //     break;
 
                 case "Update role":
                     updateRole();
-                    return;
+                    break;
 
                 // case "Update employee":
                 //     updateEmployee();
-                //     return;
+                //     break;
 
                 case "Quit":
-                    return;
+                    break;
 
                 default:
                     connection.end();
@@ -79,6 +79,8 @@ function addDepartment() {
     })
     .then(response => {
         db.createDepartment(response);
+
+        console.log("You have successfully added a new department!");
         generatePrompt();
     })
 }
@@ -88,14 +90,14 @@ function addRole() {
     .getRoles()
     .then((role) => {
 
-        // console.log(role);
+        console.table(role);
 
         const roleChoices = role.map((role) => ({
             value: role.id,
             name:  role.title,
         }))
 
-        // console.log(roleChoices);
+        console.table(roleChoices);
 
         inquirer
         .prompt([
@@ -127,7 +129,7 @@ function addEmployee() {
     .getEmployeesAndRoles()
     .then((employees) => {
 
-        // console.log(employees);
+        console.table(employees);
 
         const employeeChoices = employees.map((employees) => ({
             value: employees.id,
@@ -139,15 +141,7 @@ function addEmployee() {
             name: employees.title,
         }))
 
-        // console.log(
-        //     employees.map((employees) => ({
-        //         id: employees.id,
-        //         first: employees.first_name,
-        //         last: employees.last_name,
-        //         title: employees.title,
-        //         manager: employees.manager_id,
-        //     }))
-        // );
+        console.table(employeeChoices, roleChoices);
 
     inquirer
     .prompt([
@@ -174,7 +168,7 @@ function addEmployee() {
             choices: employeeChoices,
         }
     ]).then((response) => {
-        console.log(response);
+        console.table(response);
         db.createEmployee(response);
         generatePrompt()
         })
@@ -212,7 +206,7 @@ function updateRole() {
     .getEmployeesAndRoles()
     .then((employees) => {
 
-        console.log(employees);
+        console.table(employees);
 
         const employeeChoices = employees.map((employees) => ({
             value: employees.id,
@@ -226,7 +220,7 @@ function updateRole() {
             // }
         }))
 
-        console.log(roleChoices
+        console.table(roleChoices
             // employees.map((employees) => ({
             //     id: employees.id,
             //     first: employees.first_name,
@@ -251,7 +245,7 @@ function updateRole() {
             choices: roleChoices,
         },
     ]).then((response) => {
-        console.log(response);
+        console.table(response);
         const data = [ {role_id: response.role_id}, {id: response.id} ]
         db.updateEmployee(data);
         generatePrompt()
