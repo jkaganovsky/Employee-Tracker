@@ -19,13 +19,14 @@ A command-line application that allows a business owner to view and manage the d
 * DEMO
 
     ![Preview](./assets/images/Employee_Tracker.gif)
-    
+
     [HTML Preview Link](https://drive.google.com/file/d/1GFaNG7Ga8Q1QYAofJCmbIKwbxb_-wvj-/view)
 
 ## Credits
 1. My husband, Sergei Kaganovsky, a Software Development Engineer at Amazon AWS - https://www.linkedin.com/in/sergeik/
 1. How to JOIN 2 or more tables - https://learnsql.com/blog/how-to-join-3-tables-or-more-in-sql/
 1. My fellow classmate, Elizabeth Brandt - https://github.com/elizabethbrandt
+1. My Trilogy Education Tutor, Jacob Carver - https://www.linkedin.com/in/jacob-carver-software-developer125b81191/
 
 ## License
 MIT License
