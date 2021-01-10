@@ -160,23 +160,20 @@ function addRole() {
 
 function addEmployee() {
     db
-        .getRoles()
-        .then((roles) => {
+        .getEmployeesAndRoles()
+        .then((employeeAndRoles) => {
 
-            console.table(roles);
+            console.table(employeeAndRoles);
 
-            const roleChoices = roles.map((roles) => ({
-                value: roles.id,
-                name: roles.title
-            }))
+            const roleChoices = employeeAndRoles.map((employeeAndRoles) => ({
+                value: employeeAndRoles.id,
+                name: employeeAndRoles.title,
+            }));
 
-    // db
-    //     .getEmployees()
-    //     .then((employee) => {
-    //         const employeeChoices = employee.map((employee) => ({
-    //             value: employee.id,
-    //             name: employee.first_name + " " + roles.last_name,
-    //         }))
+            const employeeChoices = employeeAndRoles.map((employeeAndRoles) => ({
+                value: employeeAndRoles.id,
+                name: employeeAndRoles.first_name + " " + employeeAndRoles.last_name,
+            }));
 
             // console.table(employeeChoices);
             // console.table(roleChoices);
@@ -199,12 +196,12 @@ function addEmployee() {
                     message: "What is the employee's role?",
                     choices: roleChoices,
                 },
-                // {
-                //     name: 'manager_id',
-                //     type: 'list',
-                //     message: "Who is the employee's manager?",
-                //     choices: employeeChoices,
-                // }
+                {
+                    name: 'manager_id',
+                    type: 'list',
+                    message: "Who is the employee's manager?",
+                    choices: employeeChoices,
+                }
             ])
             .then((response) => {
                 console.table(response);
