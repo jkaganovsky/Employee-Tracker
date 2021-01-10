@@ -160,22 +160,26 @@ function addRole() {
 
 function addEmployee() {
     db
-        .getEmployeesAndRoles()
-        .then((employees) => {
+        .getRoles()
+        .then((roles) => {
 
-            console.table(employees);
+            console.table(roles);
 
-            const employeeChoices = employees.map((employees) => ({
-                value: employees.id,
-                name: employees.first_name + " " + employees.last_name
+            const roleChoices = roles.map((roles) => ({
+                value: roles.id,
+                name: roles.title
             }))
 
-            const roleChoices = employees.map((employees) => ({
-                value: employees.role_id,
-                name: employees.title,
-            }))
+    // db
+    //     .getEmployees()
+    //     .then((employee) => {
+    //         const employeeChoices = employee.map((employee) => ({
+    //             value: employee.id,
+    //             name: employee.first_name + " " + roles.last_name,
+    //         }))
 
-            console.table(employeeChoices, roleChoices);
+            // console.table(employeeChoices);
+            // console.table(roleChoices);
 
         inquirer
             .prompt([
@@ -195,12 +199,12 @@ function addEmployee() {
                     message: "What is the employee's role?",
                     choices: roleChoices,
                 },
-                {
-                    name: 'manager_id',
-                    type: 'list',
-                    message: "Who is the employee's manager?",
-                    choices: employeeChoices,
-                }
+                // {
+                //     name: 'manager_id',
+                //     type: 'list',
+                //     message: "Who is the employee's manager?",
+                //     choices: employeeChoices,
+                // }
             ])
             .then((response) => {
                 console.table(response);
